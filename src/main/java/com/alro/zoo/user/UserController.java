@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
 
 	@Autowired
-	private UserRepository repository;
+	public UserRepository repository;
 	
 	@PostMapping(path = "")
 	public @ResponseBody User insertUser(@RequestBody User newUser) {

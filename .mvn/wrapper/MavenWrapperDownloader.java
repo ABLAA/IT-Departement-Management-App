@@ -31,26 +31,26 @@ public class MavenWrapperDownloader {
     /**
      * Default URL to download the maven-wrapper.jar from, if no 'downloadUrl' is provided.
      */
-    private static final String DEFAULT_DOWNLOAD_URL =
+    public static final String DEFAULT_DOWNLOAD_URL =
             "https://repo.maven.apache.org/maven2/io/takari/maven-wrapper/0.4.2/maven-wrapper-0.4.2.jar";
 
     /**
      * Path to the maven-wrapper.properties file, which might contain a downloadUrl property to
      * use instead of the default one.
      */
-    private static final String MAVEN_WRAPPER_PROPERTIES_PATH =
+    public static final String MAVEN_WRAPPER_PROPERTIES_PATH =
             ".mvn/wrapper/maven-wrapper.properties";
 
     /**
      * Path where the maven-wrapper.jar will be saved to.
      */
-    private static final String MAVEN_WRAPPER_JAR_PATH =
+    public static final String MAVEN_WRAPPER_JAR_PATH =
             ".mvn/wrapper/maven-wrapper.jar";
 
     /**
      * Name of the property which should be used to override the default download url for the wrapper.
      */
-    private static final String PROPERTY_NAME_WRAPPER_URL = "wrapperUrl";
+    public static final String PROPERTY_NAME_WRAPPER_URL = "wrapperUrl";
 
     public static void main(String args[]) {
         System.out.println("- Downloader started");
@@ -101,7 +101,7 @@ public class MavenWrapperDownloader {
         }
     }
 
-    private static void downloadFileFromURL(String urlString, File destination) throws Exception {
+    public static void downloadFileFromURL(String urlString, File destination) throws Exception {
         URL website = new URL(urlString);
         ReadableByteChannel rbc;
         rbc = Channels.newChannel(website.openStream());
