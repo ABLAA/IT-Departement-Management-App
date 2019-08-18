@@ -1,13 +1,11 @@
 package com.alro.zoo.login;
 
-import java.util.Date;
+import javax.validation.constraints.NotEmpty;
 
 public class LoginDTO {
-	
-	public String email;
-	public String firstName;
+	@NotEmpty
+	public String emailOrPseudo;
+	@NotEmpty
 	public String password;
-	public String lastName;
-	public Date birthDate;
 
 }
