@@ -1,4 +1,4 @@
-package com.alro.zoo.login;
+package com.alro.zoo.login.dtos;
 
 import javax.validation.constraints.NotEmpty;
 

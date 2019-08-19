@@ -1,34 +1,26 @@
 package com.alro.zoo.user;
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.annotation.Transient;
 
+import com.alro.zoo.shared.GenericEntity;
+
 @Entity
-public class User {
+
+public class User extends GenericEntity{
 	
 
 	@Transient
 	public static String prefix = "USR";
 
-	@Id
-	@Column(length = 12)
-	private String code;
+
 	private String firstName;
 	private String lastName;
 	private Date birthDate;
-	
-
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	
+		
 	
 	public String getFirstName() {
 		return firstName;

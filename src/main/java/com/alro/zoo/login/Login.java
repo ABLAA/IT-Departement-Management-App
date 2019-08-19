@@ -2,23 +2,21 @@ package com.alro.zoo.login;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.Transient;
 
+import com.alro.zoo.shared.GenericEntity;
 import com.alro.zoo.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Login {
+public class Login extends GenericEntity {
+	
 	
 	@Transient
 	public static String prefix = "LOG";
 	
-	@Id
-	@Column(length = 15 )
-	private String code;
 	@OneToOne
 	private User user;
 	@JsonIgnore
@@ -29,14 +27,6 @@ public class Login {
 	private String pseudo; 
 
 
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
 
 	public User getUser() {
 		return user;
