@@ -41,7 +41,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			String jwtToken = removeBearerPrefixFromTheToken(requestTokenHeader);
 			String userCode = tryToGetUserCodefromToken(jwtToken);
 			validateToken(jwtToken, userCode, request);
+			jwtUserDetailsService.setConnectedUserByLoginCode(userCode);
 		}
+		
 		
 		chain.doFilter(request, response);
 	}

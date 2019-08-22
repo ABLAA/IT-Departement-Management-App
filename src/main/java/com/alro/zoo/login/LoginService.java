@@ -46,13 +46,27 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 	@Autowired
 	private AuthenticationManager authenticationManager;
 	
+	private User connectedUser;
+	
+	public User getConnectedUser() {
+		return connectedUser;
+	}
+
+	public void setConnectedUser(User connectedUser) {
+		this.connectedUser = connectedUser;
+	}
+	
+	public void setConnectedUserByLoginCode(String loginCode) {
+		this.connectedUser = findById(loginCode).getUser();
+	}
+
 	@Override
 	public LoginRepository getRepo() {
 		return repo;
 	}
 	
 	@Override
-	protected String getPrefix() {
+	public String getPrefix() {
 		return Login.prefix;
 	}
 	

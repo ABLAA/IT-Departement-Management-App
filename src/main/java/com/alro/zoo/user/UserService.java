@@ -21,7 +21,7 @@ public class UserService extends GenericService<User, UserRepository> {
 	}
 	
 	@Override
-	protected String getPrefix() {
+	public String getPrefix() {
 		return User.prefix;
 	}
 	

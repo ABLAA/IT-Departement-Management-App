@@ -1,27 +1,15 @@
 package com.alro.zoo.shared;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import org.springframework.data.annotation.Transient;
 
-@Entity
-public class GenericEntity {
+public abstract class GenericEntity {
 	
 	@Transient
-	public static String prefix = "";
-	
-	@Id
-	@Column(length = 15 )
-	private String code;
-	
-	public String getCode() {
-		return code;
+	public static String getPrefix() {
+		return "";
 	}
-	public void setCode(String code) {
-		this.code = code;
-	}
+	public abstract String getCode();
+	public abstract void setCode(String code);
 	
 	
 

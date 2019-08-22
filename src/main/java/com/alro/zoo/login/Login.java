@@ -2,6 +2,7 @@ package com.alro.zoo.login;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.Transient;
@@ -17,6 +18,18 @@ public class Login extends GenericEntity {
 	@Transient
 	public static String prefix = "LOG";
 	
+	@Id
+	@Column(length = 15)
+	private String code;
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	@OneToOne
 	private User user;
 	@JsonIgnore
