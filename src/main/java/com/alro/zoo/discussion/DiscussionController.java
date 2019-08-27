@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.alro.zoo.discussion.discussion.Discussion;
 import com.alro.zoo.discussion.discussion.DiscussionService;
-import com.alro.zoo.discussion.message.Message;
 import com.alro.zoo.discussion.message.DTO.newMessageRequestDto;
 
 @Controller
