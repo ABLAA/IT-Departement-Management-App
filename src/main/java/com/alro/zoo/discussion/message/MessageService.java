@@ -20,6 +20,21 @@ public class MessageService extends GenericService<Message, MessageRepository>{
 	@Autowired
 	private LoginService loginService;
 
+	public MessageService() {
+		super();
+	}
+	
+	public MessageService(MessageRepository repo) {
+		super();
+		this.repo = repo;
+	}
+
+	public MessageService(MessageRepository repo, LoginService loginService) {
+		super();
+		this.repo = repo;
+		this.loginService = loginService;
+	}
+
 	@Override
 	public MessageRepository getRepo() {
 		return repo;

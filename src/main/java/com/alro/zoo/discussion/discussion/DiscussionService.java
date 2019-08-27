@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.alro.zoo.discussion.message.Message;
 import com.alro.zoo.discussion.message.MessageService;
 import com.alro.zoo.discussion.message.DTO.newMessageRequestDto;
 import com.alro.zoo.login.LoginService;
@@ -35,6 +34,27 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 	@Autowired
 	private UserService userService;
 	
+	
+	
+	public DiscussionService() {
+		super();
+	}
+	
+
+	public DiscussionService(DisussionRepository repo) {
+		super();
+		this.repo = repo;
+	}
+
+	public DiscussionService(DisussionRepository repo, MessageService messageService, LoginService loginService,
+			UserService userService) {
+		super();
+		this.repo = repo;
+		this.messageService = messageService;
+		this.loginService = loginService;
+		this.userService = userService;
+	}
+
 	@Override
 	public String getPrefix() {
 		return Discussion.prefix;

@@ -48,6 +48,23 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 	
 	private User connectedUser;
 	
+
+	public LoginService() {
+		super();
+	}
+	public LoginService(LoginRepository repo) {
+		super();
+		this.repo = repo;
+	}
+	public LoginService(UserService userService, LoginRepository repo, JwtTokenUtil jwtTokenUtil,
+			AuthenticationManager authenticationManager) {
+		super();
+		this.userService = userService;
+		this.repo = repo;
+		this.jwtTokenUtil = jwtTokenUtil;
+		this.authenticationManager = authenticationManager;
+	}
+	
 	public User getConnectedUser() {
 		return connectedUser;
 	}
@@ -71,20 +88,10 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 	}
 	
 	public ResponseEntity<Login> signInNewUser(SignInDTO dto){
-		User user = createUserObject(dto);
+		User user = userService.createUserObject(dto);
 		Login login = createLoginObject(dto);
 		Login requestBody = saveUserInDataBase(user,login);
 		return ResponseEntity.created(null).body(requestBody);
-	}
-	
-	private User createUserObject(SignInDTO dto) {
-		User user = new User();
-		String userCode = userService.generateNewCode();
-		user.setCode(userCode);
-		user.setBirthDate(dto.birthDate);
-		user.setFirstName(dto.firstName);
-		user.setLastName(dto.lastName);
-		return user;
 	}
 	
 	private Login createLoginObject(SignInDTO dto) {
@@ -96,20 +103,20 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 		return log ;
 	}
 	
-	private Login saveUserInDataBase(User user, Login log){
-		User savedUser = userService.getRepo().save(user);
-		log.setUser(savedUser);
-		return tryToSaveLogin(log);
+	private Login saveUserInDataBase(User user, Login login){
+		User savedUser = userService.saveNewUser(user);
+		login.setUser(savedUser);
+		return tryToSaveLogin(login);
 	}
 	
-	private Login tryToSaveLogin(Login log) {
+	private Login tryToSaveLogin(Login login) {
 		try {
-			return repo.save(log);
+			return repo.save(login);
 		} catch (Exception e) {
-			userService.getRepo().delete(log.getUser());
+			userService.getRepo().delete(login.getUser());
 			handleTryToSaveLoginException(e);
 		}
-		return log;
+		return login;
 	}
 	
 	private void handleTryToSaveLoginException(Exception e) {

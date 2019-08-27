@@ -43,6 +43,25 @@ public class PostService extends GenericService<Post, PostRepository> {
 		return repo;
 	}
 	
+	
+	public PostService() {
+	}
+	
+	public PostService(PostRepository repo) {
+		this.repo = repo;
+	}
+
+	public PostService(PostRepository repo, LoginService loginService, UserService userService,
+			CommentService commentService) {
+		super();
+		this.repo = repo;
+		this.loginService = loginService;
+		this.userService = userService;
+		this.commentService = commentService;
+	}
+
+
+
 	@Override
 	public String getPrefix() {
 		return Post.prefix;
