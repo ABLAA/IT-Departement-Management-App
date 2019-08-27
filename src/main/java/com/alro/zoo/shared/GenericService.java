@@ -35,7 +35,6 @@ public abstract class  GenericService<T extends GenericEntity ,R extends JpaRepo
 	
 	public T findById(String code) {
 		Optional<T> option = (Optional<T>) getRepo().findById(code);
-		System.out.println(option);
 		if (option.isPresent()) {
 			return option.get();
 		}else {

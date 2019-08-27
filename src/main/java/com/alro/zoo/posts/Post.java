@@ -1,17 +1,22 @@
 package com.alro.zoo.posts;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.springframework.data.annotation.Transient;
 
+import com.alro.zoo.posts.comment.Comment;
 import com.alro.zoo.shared.GenericEntity;
 import com.alro.zoo.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Post extends GenericEntity {
@@ -31,7 +36,11 @@ public class Post extends GenericEntity {
 	private User author;
 	
 	@Lob
+	@JsonIgnore
     private Byte[] image;
+	
+	@OneToMany(mappedBy = "post")
+	private List<Comment> comments = new ArrayList<Comment>();
 
 	public String getTitle() {
 		return title;
@@ -73,7 +82,14 @@ public class Post extends GenericEntity {
 		this.code = code;
 	}
 
+	public List<Comment> getComments() {
+		return comments;
+	}
 
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+	
 	
 	
 }
