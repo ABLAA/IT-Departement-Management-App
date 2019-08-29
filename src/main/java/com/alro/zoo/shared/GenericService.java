@@ -43,4 +43,10 @@ public abstract class  GenericService<T extends GenericEntity ,R extends JpaRepo
 		
 	}
 
+	public void setMethods(GeneralMethods methods) {
+		this.methods = methods;
+	}
+	
+	
+
 }

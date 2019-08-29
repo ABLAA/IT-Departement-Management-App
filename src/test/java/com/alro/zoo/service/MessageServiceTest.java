@@ -13,6 +13,7 @@ import com.alro.zoo.discussion.discussion.DisussionRepository;
 import com.alro.zoo.discussion.message.MessageRepository;
 import com.alro.zoo.discussion.message.MessageService;
 import com.alro.zoo.login.LoginService;
+import com.alro.zoo.shared.GeneralMethods;
 import com.alro.zoo.user.UserService;
 
 public class MessageServiceTest {
@@ -22,6 +23,9 @@ public class MessageServiceTest {
 	
 	@Mock
 	private LoginService loginService;
+	
+	@Mock
+	private GeneralMethods methods;
 	
 	private MessageService service;
 	

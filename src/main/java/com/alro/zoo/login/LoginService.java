@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,16 +58,20 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 		this.repo = repo;
 	}
 	public LoginService(UserService userService, LoginRepository repo, JwtTokenUtil jwtTokenUtil,
-			AuthenticationManager authenticationManager) {
+			AuthenticationManager authenticationManager, BCryptPasswordEncoder passwordEncoder) {
 		super();
 		this.userService = userService;
 		this.repo = repo;
 		this.jwtTokenUtil = jwtTokenUtil;
 		this.authenticationManager = authenticationManager;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
+	
 	public User getConnectedUser() {
-		return connectedUser;
+		if(connectedUser!= null)
+			return connectedUser;
+		throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "There is no Connected User");
 	}
 
 	public void setConnectedUser(User connectedUser) {
@@ -86,6 +91,9 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 	public String getPrefix() {
 		return Login.prefix;
 	}
+	
+	
+	
 	
 	public ResponseEntity<Login> signInNewUser(SignInDTO dto){
 		User user = userService.createUserObject(dto);
@@ -115,8 +123,8 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 		} catch (Exception e) {
 			userService.getRepo().delete(login.getUser());
 			handleTryToSaveLoginException(e);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		return login;
 	}
 	
 	private void handleTryToSaveLoginException(Exception e) {
@@ -127,6 +135,8 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
+	
+	
 	
 	
 	public ResponseEntity<JwtResponse> authinticateUser(LoginDTO authenticationRequest){
@@ -147,28 +157,28 @@ public class LoginService extends GenericService<Login, LoginRepository> impleme
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Unvalid Coordonates");
 		}
 	}
+
 	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Login details = getLoginByEmailOrPseudo(username);
+		return new org.springframework.security.core.userdetails.User(details.getCode(), details.getPassword(), new ArrayList<>());
+	}
 	
-	private Login getLoginByEmailOrPseudo(String emailOrPseudo) {
+	private Login getLoginByEmailOrPseudo(String emailOrPseudo) throws UsernameNotFoundException {
 		Optional<Login> details = repo.findOneByEmail(emailOrPseudo);
 		if(!details.isPresent()) {
 			details = repo.findOneByPseudo(emailOrPseudo);	
 		}
 		if(!details.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unvalid Coordonates");
+			throw new UsernameNotFoundException("User not found with username: " + emailOrPseudo);
+		}
+		Login login = details.get();
+		if(login.getCode() == null || login.getPassword() == null) {
+			throw new UsernameNotFoundException("Login details corrupted");
 		}
 		return details.get();
 		
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Login details = getLoginByEmailOrPseudo(username);
-		if(details != null) {
-			return new org.springframework.security.core.userdetails.User(details.getCode(), details.getPassword(), new ArrayList<>());
-		}else {
-			throw new UsernameNotFoundException("User not found with username: " + username);
-		}
 	}
 	
 	public UserDetails loadUserByCode(String code) throws UsernameNotFoundException {

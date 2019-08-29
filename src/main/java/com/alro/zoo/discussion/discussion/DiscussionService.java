@@ -65,6 +65,8 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 		return repo;
 	}
 	
+	
+	
 	public ResponseEntity<List<Discussion>> retrieveConnectedUserDiscussion() {
 		User connectedUser = loginService.getConnectedUser();
 		List<Discussion> body = findDiscussionsByUser(connectedUser);
@@ -80,7 +82,7 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 	
 	
 	
-	public ResponseEntity<Discussion> retrieveDiscussionByCode(String discussionCode){
+	public ResponseEntity<Discussion> retrieveDiscussionByCode(String discussionCode){//////////
 		Discussion body = findById(discussionCode);
 		return ResponseEntity.ok().body(body);
 	}

@@ -12,6 +12,7 @@ import com.alro.zoo.discussion.discussion.DiscussionService;
 import com.alro.zoo.login.LoginService;
 import com.alro.zoo.posts.comment.CommentRepository;
 import com.alro.zoo.posts.comment.CommentService;
+import com.alro.zoo.shared.GeneralMethods;
 
 public class CommentServiceTest {
 
@@ -20,6 +21,9 @@ public class CommentServiceTest {
 	
 	@Mock
 	private LoginService loginService;
+	
+	@Mock
+	private GeneralMethods methods;
 	
 	private CommentService service;
 	

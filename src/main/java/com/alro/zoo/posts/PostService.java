@@ -96,12 +96,12 @@ public class PostService extends GenericService<Post, PostRepository> {
     
     
     public ResponseEntity<byte[]> restoreImageFromDataBase(String postCode){
-    	Post recipeCommand = findById(postCode);
-        if (recipeCommand.getImage() != null) {
+    	Post post = findById(postCode);
+        if (post.getImage() != null) {
         	return ResponseEntity
         			.accepted()
         			.contentType(MediaType.IMAGE_JPEG)
-        			.body(wrapByteArray(recipeCommand.getImage()));
+        			.body(wrapByteArray(post.getImage()));
         }
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found with post code: " + postCode);
     }
@@ -124,7 +124,7 @@ public class PostService extends GenericService<Post, PostRepository> {
     	User user = loginService.getConnectedUser();
     	return ResponseEntity.ok().body(repo.findAllByAuthor(user));
     }
-    
+
     public ResponseEntity<Post> createNewCommentOfAPost(CommentRequestDTO request){
     	Post post = findById(request.postCode);
     	commentService.createNewComment(request.comment, post);
