@@ -65,6 +65,19 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 		return repo;
 	}
 	
+	public ResponseEntity<Discussion> createNewMessageAndAddItToDiscussion(newMessageRequestDto request){
+		Discussion discussion = findById(request.discussionCode);
+		messageService.createNewMessge(request.message, discussion);
+		return ResponseEntity.created(null).body(discussion);
+	}
+	
+	
+	
+	public ResponseEntity<Discussion> retrieveDiscussionByCode(String discussionCode){
+		Discussion body = findById(discussionCode);
+		return ResponseEntity.ok().body(body);
+	}
+	
 	
 	
 	public ResponseEntity<List<Discussion>> retrieveConnectedUserDiscussion() {
@@ -75,19 +88,12 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 	
 	private List<Discussion> findDiscussionsByUser(User user){
 		List <Discussion> result = new ArrayList<Discussion>();
-		result.addAll( repo.findAllByFirstInterlocutor(user));
+		result.addAll(repo.findAllByFirstInterlocutor(user));
 		result.addAll(repo.findAllBySecondInterlocutor(user));
 		return result;
 	}
 	
-	
-	
-	public ResponseEntity<Discussion> retrieveDiscussionByCode(String discussionCode){//////////
-		Discussion body = findById(discussionCode);
-		return ResponseEntity.ok().body(body);
-	}
-	
-	
+
 	
 	public ResponseEntity<Discussion> retrieveDiscussionByConnectedUserAndAnOtherUser(String otherUserCode){
 		User connectedUser = loginService.getConnectedUser();
@@ -120,7 +126,7 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 	
 	private Discussion tryCreateDiscussion(User firstUser, User secondUser) {
 		if ( !checkExistenceByUsers(firstUser, secondUser)) {
-			return repo.save( createDiscussion(firstUser, secondUser) );
+			return createNewDiscussion(firstUser, secondUser);
 		}
 		else {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "there is discussion between the two users with code: "
@@ -133,27 +139,24 @@ public class DiscussionService extends GenericService<Discussion, DisussionRepos
 		try {
 			findDiscussionByUsers(firstUser, secondUser);
 			return true;
-		}catch (Exception e) {
+		}catch (ResponseStatusException e) {
 			return false;
 		}
 	}
 	
-	private Discussion createDiscussion(User firstUser, User secondUser) {
+	private Discussion createNewDiscussion(User firstUser, User secondUser) {
 		Discussion newDiscussion = new Discussion();
 		newDiscussion.setCode(generateNewCode());
 		newDiscussion.setFirstInterlocutor(firstUser);
 		newDiscussion.setSecondInterlocutor(secondUser);
-		return newDiscussion;
+		return repo.save(newDiscussion);
 	}
 	
 	
 	
 	
-	public ResponseEntity<Discussion> createNewMessageAndAddItToDiscussion(newMessageRequestDto request){
-		Discussion discussion = findById(request.discussionCode);
-		messageService.createNewMessge(request.message, discussion);
-		return ResponseEntity.created(null).body(discussion);
-	}
+	
+	
 
 	
 
