@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.alro.zoo.login.LoginService;
+import com.alro.zoo.Login.LoginService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 

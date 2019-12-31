@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.alro.zoo.configuration.jwt.JwtAuthenticationEntryPoint;
 import com.alro.zoo.configuration.jwt.JwtRequestFilter;
-import com.alro.zoo.login.LoginService;
+import com.alro.zoo.Login.LoginService;
 
 @Configuration
 @EnableWebSecurity

@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.alro.zoo.login.LoginService;
-import com.alro.zoo.login.dtos.SignInDTO;
+import com.alro.zoo.Department.DepartmentService;
+import com.alro.zoo.Login.LoginService;
+import com.alro.zoo.Login.dtos.SignInDTO;
 import com.alro.zoo.shared.GenericService;
 
 @Service
@@ -17,17 +18,19 @@ public class UserService extends GenericService<User, UserRepository> {
 	@Autowired
 	private LoginService loginService;
 	
+	@Autowired
+	private DepartmentService depService;
 	
-	
-	public UserService(UserRepository repo, LoginService loginService) {
+	public UserService(UserRepository repo, LoginService loginService, DepartmentService depService) {
 		super();
 		this.repo = repo;
 		this.loginService = loginService;
+		this.depService = depService;
 	}
 
-	public UserService(UserRepository repo) {
-		this.repo = repo;
-	}
+//	public UserService(UserRepository repo) {
+//		this.repo = repo;
+//	}
 	
 	public UserService() {
 
@@ -58,6 +61,7 @@ public class UserService extends GenericService<User, UserRepository> {
 		user.setBirthDate(dto.birthDate);
 		user.setFirstName(dto.firstName);
 		user.setLastName(dto.lastName);
+		user.setDepartment(depService.getRepo().findOneByTitle(dto.departmentName).get());
 		return user;
 	}
 	
