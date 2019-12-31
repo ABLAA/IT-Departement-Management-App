@@ -5,11 +5,11 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-const Home = React.lazy(() => import("./Demo/Other/Home"));
-const Students = React.lazy(() => import("./Demo/Other/students"));
-const Teachers = React.lazy(() => import("./Demo/Other/teachers"));
+const Home = React.lazy(() => import("./Demo/Containers/Home"));
+const Students = React.lazy(() => import("./Demo/Containers/students"));
+const Teachers = React.lazy(() => import("./Demo/Containers/teachers"));
 const AdministrativeManagers = React.lazy(() =>
-  import("./Demo/Other/administrativeManagers")
+  import("./Demo/Containers/administrativeManagers")
 );
 const Ecommerce = React.lazy(() => import("./Demo/Dashboard/Ecommerce"));
 

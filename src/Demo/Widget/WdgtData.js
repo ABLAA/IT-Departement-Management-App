@@ -347,18 +347,14 @@ class WdgtData extends React.Component {
                     <Col md={6} xl={4}>
                         <Card className='lazy-dog'>
                             <Card.Header>
-                                <Card.Title as='h5'>Do you know Datta Able is released?</Card.Title>
+                                <Card.Title as='h5'></Card.Title>
                             </Card.Header>
-                            <Card.Body>
-                                <Card.Text>Datta Able comes with Bootstrap 4 & Angular 7+ and React. It is best kind of own Dashboard categoty.</Card.Text>
-                            </Card.Body>
+                 
                         </Card>
                     </Col>
                     <Col md={6} xl={4}>
                         <Card className='Design-sprint theme-bg2'>
                             <Card.Header className='borderless'>
-                                <Card.Title as='h5' className='text-white'>Do you know Datta Able is released?</Card.Title>
-                                <Card.Text className='d-block text-white'>11 MAY 10:35</Card.Text>
                             </Card.Header>
                             <Card.Body>
                                 <p className="text-white">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>

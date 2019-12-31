@@ -89,8 +89,7 @@ class Breadcrumb extends Component {
       }
     }
 
-    document.title =
-      title + " | Datta Able Premium React + Redux Admin Template";
+    document.title = title + " | IT-Department-Management-App";
 
     return <Aux>{breadcrumb}</Aux>;
   }
