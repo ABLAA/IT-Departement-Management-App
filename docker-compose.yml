@@ -1,0 +1,33 @@
+version: "3.7"
+
+services: 
+    db:
+        image: mysql:5.7
+        ports: 
+            - "3306:3306"
+        restart: always
+        environment:
+            MYSQL_DATABASE: SOA
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - ../data:/var/lib/mysql
+        networks:
+            - backend 
+        
+    back:
+        build:
+            context: .
+            dockerfile: dockerfile
+        ports: 
+            - '8080:8080'
+        restart: always
+        networks: 
+            - backend
+        depends_on: 
+            - db
+        
+   
+networks: 
+    backend:
