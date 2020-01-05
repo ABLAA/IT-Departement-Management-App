@@ -1,13 +1,12 @@
 package com.alro.zoo.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.alro.zoo.Department.DepartmentService;
-import com.alro.zoo.Login.LoginService;
-import com.alro.zoo.Login.dtos.SignInDTO;
+import com.alro.zoo.user.dtos.SignInDTO;
 import com.alro.zoo.shared.GenericService;
+
 
 @Service
 public class UserService extends GenericService<User, UserRepository> {
@@ -15,22 +14,19 @@ public class UserService extends GenericService<User, UserRepository> {
 	@Autowired
 	private UserRepository repo;
 	
-	@Autowired
-	private LoginService loginService;
+
 	
 	@Autowired
 	private DepartmentService depService;
 	
-	public UserService(UserRepository repo, LoginService loginService, DepartmentService depService) {
+	public UserService(UserRepository repo, DepartmentService depService) {
 		super();
 		this.repo = repo;
-		this.loginService = loginService;
+
 		this.depService = depService;
 	}
 
-//	public UserService(UserRepository repo) {
-//		this.repo = repo;
-//	}
+
 	
 	public UserService() {
 
@@ -46,9 +42,7 @@ public class UserService extends GenericService<User, UserRepository> {
 		return User.prefix;
 	}
 	
-	public ResponseEntity<User> findConnectedUser(){
-		return ResponseEntity.ok().body(loginService.getConnectedUser());
-	}
+
 	
 	public User saveNewUser(User user) {
 		return repo.save(user);
