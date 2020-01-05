@@ -4,15 +4,11 @@ import {
   ValidationForm,
   TextInput,
   BaseFormControl,
-  SelectGroup,
-  FileInput,
-  Checkbox,
-  Radio
+  FileInput
 } from "react-bootstrap4-form-validation";
 import MaskedInput from "react-text-mask";
-import validator from "validator";
 import Aux from "../../hoc/_Aux";
-
+import axios from "axios";
 class MaskWithValidation extends BaseFormControl {
   constructor(props) {
     super(props);
@@ -86,7 +82,17 @@ class Students extends Component {
       [e.target.name]: value
     });
   };
-
+  componentDidMount() {
+    this.getStudents();
+    console.log("ok");
+  }
+  getStudents = () => {
+    axios.get("http://localhost:8080/departments").then(response => {
+      // this.setState({ products: response.data });
+      console.log(response.data);
+      console.log("ok");
+    });
+  };
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value

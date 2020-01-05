@@ -7,7 +7,7 @@ import shape5 from '../../assets/images/widget/shape5.png';
 import DEMO from "../../store/constant";
 import AmChartEarnings1 from "../Widget/Chart/AmChartEarnings1";
 
-class Ecommerce extends Component {
+class Statistics extends Component {
     render() {
         return (
             <Aux>
@@ -15,36 +15,36 @@ class Ecommerce extends Component {
                     <Col md={6} xl={4}>
                         <Card className='Online-Order'>
                             <Card.Body>
-                                <h5>Online Orders</h5>
-                                <h6 className="text-muted d-flex align-items-center justify-content-between m-t-30">Delivery Orders<span className="float-right f-18 text-c-green">237 / 400</span></h6>
+                                <h5>Absenteeism rate </h5>
+                                <h6 className="text-muted d-flex align-items-center justify-content-between m-t-30"><span className="float-right f-18 text-c-green">237 / 400</span></h6>
                                 <div className="progress mt-3">
                                     <div className="progress-bar progress-c-theme" role="progressbar" style={{width: '65%', height: '6px'}} aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
-                                <span className="text-muted mt-2 d-block">37% Done</span>
+                                <span className="text-muted mt-2 d-block">37% Absent</span>
                             </Card.Body>
                         </Card>
                     </Col>
                     <Col md={6} xl={4}>
                         <Card className='Online-Order'>
                             <Card.Body>
-                                <h5>Pending Orders</h5>
-                                <h6 className="text-muted d-flex align-items-center justify-content-between m-t-30">pending Orders<span className="float-right f-18 text-c-purple">100 / 500</span></h6>
+                                <h5>Success rate</h5>
+                                <h6 className="text-muted d-flex align-items-center justify-content-between m-t-30"><span className="float-right f-18 text-c-purple">100 / 500</span></h6>
                                 <div className="progress mt-3">
                                     <div className="progress-bar progress-c-theme2" role="progressbar" style={{width: '50%', height: '6px'}} aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
-                                <span className="text-muted mt-2 d-block">20% pending</span>
+                                <span className="text-muted mt-2 d-block">20% succeded</span>
                             </Card.Body>
                         </Card>
                     </Col>
                     <Col xl={4}>
                         <Card className='Online-Order'>
                             <Card.Body>
-                                <h5>Return Orders</h5>
-                                <h6 className="text-muted d-flex align-items-center justify-content-between m-t-30">Return Orders<span className="float-right f-18 text-c-blue">50 / 400</span></h6>
+                                <h5>Control session</h5>
+                                <h6 className="text-muted d-flex align-items-center justify-content-between m-t-30"><span className="float-right f-18 text-c-blue">50 / 400</span></h6>
                                 <div className="progress mt-3">
                                     <div className="progress-bar progress-c-blue" role="progressbar" style={{width: '40%', height: '6px'}} aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
-                                <span className="text-muted mt-2 d-block">10% Return</span>
+                                <span className="text-muted mt-2 d-block">10% failed</span>
                             </Card.Body>
                         </Card>
                     </Col>
@@ -75,7 +75,7 @@ class Ecommerce extends Component {
                     <Col xl={4} md={6}>
                         <Card className='theme-bg earning-date'>
                             <Card.Header className='borderless'>
-                                <Card.Title as='h5' className='text-white'>Earnings</Card.Title>
+                                <Card.Title as='h5' className='text-white'>Total Number</Card.Title>
                             </Card.Header>
                             <Card.Body>
                                 <div className='bd-example bd-example-tabs'>
@@ -83,7 +83,7 @@ class Ecommerce extends Component {
                                         <Tab.Content>
                                             <Tab.Pane eventKey="mon">
                                                 <h2 className="text-white mb-3 f-w-300">359,234<i className="feather icon-arrow-up"></i></h2>
-                                                <span className="text-white mb-4 d-block">TOTAL EARNINGS</span>
+                                                <span className="text-white mb-4 d-block">Student total Number</span>
                                             </Tab.Pane>
                                             <Tab.Pane eventKey="tue">
                                                 <h2 className="text-white mb-3 f-w-300">222,586<i className="feather icon-arrow-down"></i></h2>
@@ -145,7 +145,7 @@ class Ecommerce extends Component {
                                     </div>
                                     <div className="col">
                                         <h2 className="text-white f-w-300">375</h2>
-                                        <h5 className="text-white">Sale Product</h5>
+                                        <h5 className="text-white">Teachers total Number</h5>
                                     </div>
                                 </div>
                             </Card.Body>
@@ -154,7 +154,7 @@ class Ecommerce extends Component {
                     <Col xl={8} md={6}>
                         <Card className='code-table'>
                             <Card.Header>
-                                <Card.Title as='h5'>Full Width Table</Card.Title>
+                                <Card.Title as='h5'>Top present students</Card.Title>
                             </Card.Header>
                             <Card.Body className='pb-0'>
                                 <Table responsive hover>
@@ -284,12 +284,12 @@ class Ecommerce extends Component {
                     <Col xl={4}>
                         <Card>
                             <Card.Header>
-                                <Card.Title as='h5'>Earnings</Card.Title>
+                                <Card.Title as='h5'>success rate</Card.Title>
                                 <Card.Text>Mon 15 - Sun 21</Card.Text>
                             </Card.Header>
                             <Card.Body>
                                 <div className="earning-price mb-4">
-                                    <h3 className="m-0 f-w-300">$894.39</h3>
+                                    <h3 className="m-0 f-w-300">894.39</h3>
                                 </div>
                                 <AmChartEarnings1 height='235px'/>
                             </Card.Body>
@@ -301,4 +301,4 @@ class Ecommerce extends Component {
     }
 };
 
-export default Ecommerce;
+export default Statistics;

@@ -11,7 +11,7 @@ const Teachers = React.lazy(() => import("./Demo/Containers/teachers"));
 const AdministrativeManagers = React.lazy(() =>
   import("./Demo/Containers/administrativeManagers")
 );
-const Ecommerce = React.lazy(() => import("./Demo/Dashboard/Ecommerce"));
+const Statistics = React.lazy(() => import("./Demo/Dashboard/Statistics"));
 
 const routes = [
   {
@@ -29,10 +29,10 @@ const routes = [
     component: AdministrativeManagers
   },
   {
-    path: "/Ecommerce",
+    path: "/Statistics",
     exact: true,
-    name: "Ecommerce",
-    component: Ecommerce
+    name: "Statistics",
+    component: Statistics
   }
 ];
 

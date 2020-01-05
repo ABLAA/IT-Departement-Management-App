@@ -40,7 +40,7 @@ export default {
           id: "statistics",
           title: "statistics",
           type: "item",
-          url: "/Ecommerce",
+          url: "/Statistics",
           icon: "feather icon-activity"
         },
         {
