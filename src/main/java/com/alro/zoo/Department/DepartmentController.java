@@ -19,7 +19,7 @@ import com.alro.zoo.Department.dtos.DepartmentDTO;
 
 
 
-
+@CrossOrigin
 @Controller
 public class DepartmentController {
 
@@ -31,16 +31,20 @@ public class DepartmentController {
 	public ResponseEntity<Department> addNewDepartment(@Valid @RequestBody DepartmentDTO requestDto){
 		return service.saveDepartment(requestDto);
 	}
+	
 	@CrossOrigin
 	@GetMapping(path = "/departments")
 	public ResponseEntity<List<Department>> getAllDepartments(){
 		return service.getAllDepartments();
 	}
+	
 	@CrossOrigin
 	@GetMapping(path = "/department/{departmentTitle}")
 	public ResponseEntity<Department> getDepartmentByCode(@PathVariable String departmentTitle){
 		return service.getDepartmentByTitle(departmentTitle);
-	}	
+	}
+	
+	
 	@CrossOrigin
 	@DeleteMapping(path ="/Department/{departmentCode}")
 	public ResponseEntity<Object> deleteDepartmentByCode(@PathVariable String departmentCode){
