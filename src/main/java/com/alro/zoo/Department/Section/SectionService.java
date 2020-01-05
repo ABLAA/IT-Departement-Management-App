@@ -60,8 +60,9 @@ public class SectionService extends GenericService<Section, SectionRepository> {
     	return ResponseEntity.ok().body(repo.findAll());
     }
     
-    
-    
-    
+    public ResponseEntity<Object> deleteSectionByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
     
 }

@@ -59,7 +59,11 @@ public class StudentClassService extends GenericService<StudentClass, StudentCla
 	public ResponseEntity<List<StudentClass>> getStudentClasses() {
     	return ResponseEntity.ok().body(repo.findAll());
     }
-
+	
+	public ResponseEntity<Object> deleteStudentClassByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
 
 	
 

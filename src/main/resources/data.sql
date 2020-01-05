@@ -1,1 +1,1 @@
-insert into department values("info","info");
+insert IGNORE into department values("info","info");

@@ -68,6 +68,10 @@ public class ProfessorService extends GenericService<Professor, ProfessorReposit
     public ResponseEntity<List<Professor>> findProfessors(){
     	return ResponseEntity.ok().body(repo.findAll());
     }
-	
+    
+    public ResponseEntity<Object> deleteProfessorByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
 
 }

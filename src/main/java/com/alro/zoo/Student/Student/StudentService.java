@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.alro.zoo.Student.Student.DTO.StudentDTO;
+import com.alro.zoo.UniversitairyYear.StudentClass.StudentClassService;
 import com.alro.zoo.shared.GenericService;
 
 
@@ -20,7 +21,10 @@ public class StudentService extends GenericService<Student, StudentRepository>{
 	@Autowired
 	private StudentRepository repo;
 	
+	@Autowired
+	private StudentClassService sCRepo;
 	
+
 	@Override
 	public StudentRepository getRepo() {
 		return repo;
@@ -47,6 +51,9 @@ public class StudentService extends GenericService<Student, StudentRepository>{
     	stud.setBirthDate(dto.birthDate);
     	stud.setFirstName(dto.firstName);
     	stud.setLastName(dto.lastName);
+    	stud.setStudentClass(sCRepo.findById(dto.classCode));
+    	stud.setStatus(dto.status);
+    	
     	return ResponseEntity.created(null).body(repo.save(stud));
     }
 	
@@ -58,6 +65,14 @@ public class StudentService extends GenericService<Student, StudentRepository>{
     	return ResponseEntity.ok().body(repo.findAll());
     }
 	
+	public ResponseEntity<List<Student>> getStudentsByStatus(Status status) {
+    	return ResponseEntity.ok().body(repo.findAllByStatus(status));
+    }
+	
+	public ResponseEntity<Object> deleteStudentByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
 	
 	
     

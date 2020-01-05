@@ -70,4 +70,9 @@ public class AbsenceService extends GenericService<Absence, AbsenceRepository>{
 	public ResponseEntity<List<Absence>> getAbsences ( ) {
 		return ResponseEntity.ok().body(repo.findAll());	
 	}
+	
+	public ResponseEntity<Object> deleteAbsenceByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
 }

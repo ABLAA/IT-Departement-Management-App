@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,9 +41,13 @@ public class ProfessorController {
 	}
 	
 	@GetMapping(path = "/Professor/{professorCode}")
-	public ResponseEntity<Professor> getDiscussionByCode(@PathVariable String professorCode){
+	public ResponseEntity<Professor> getProfessorByCode(@PathVariable String professorCode){
 		return service.getProfessorByCode(professorCode);
-	}	
+	}
 	
+	@DeleteMapping(path ="/Professor/{professorCode}")
+	public ResponseEntity<Object> deleteProfessorByCode(@PathVariable String professorCode){
+		return service.deleteProfessorByCode(professorCode);
+	}
 	
 }

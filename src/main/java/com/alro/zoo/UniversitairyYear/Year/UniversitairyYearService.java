@@ -45,6 +45,10 @@ public class UniversitairyYearService {
     	return ResponseEntity.ok().body(repo.findAll());
     }
 	
+	public ResponseEntity<Object> deleteUniversitairyClassByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
     
     
     

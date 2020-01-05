@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -13,6 +15,7 @@ import org.springframework.data.annotation.Transient;
 
 import com.alro.zoo.UniversitairyYear.StudentClass.StudentClass;
 import com.alro.zoo.shared.GenericEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Student extends GenericEntity {
@@ -29,7 +32,11 @@ public class Student extends GenericEntity {
 	private Date birthDate;
 	
 	@ManyToOne
+	@JsonIgnore
 	private StudentClass studentClass;
+	
+	@Enumerated(EnumType.STRING)
+	private Status status;
 	
 	
 //	@OneToMany(mappedBy = "author")
@@ -67,5 +74,23 @@ public class Student extends GenericEntity {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public StudentClass getStudentClass() {
+		return studentClass;
+	}
+
+	public void setStudentClass(StudentClass studentClass) {
+		this.studentClass = studentClass;
+	}
+	
+	
 	
 }

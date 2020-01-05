@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +47,14 @@ public class AbsenceController {
 		return service.getAbsencesByStudent(studentCode);
 	}
 	
-	@GetMapping(path = "/Absence/{AbsenceCode}")
-	public ResponseEntity<Absence> getDiscussionByCode(@PathVariable String AbsenceCode){
-		return service.getAbsenceByCode(AbsenceCode);
+	@GetMapping(path = "/Absence/{absenceCode}")
+	public ResponseEntity<Absence> getAbsenceByCode(@PathVariable String absenceCode){
+		return service.getAbsenceByCode(absenceCode);
 	}	
 	
+	@DeleteMapping(path ="/Absence/{absenceCode}")
+	public ResponseEntity<Object> deleteAbsenceByCode(@PathVariable String absenceCode){
+		return service.deleteAbsenceByCode(absenceCode);
+	}
 	
 }

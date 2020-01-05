@@ -63,7 +63,10 @@ public class DepartmentService extends GenericService<Department, DepartmentRepo
 	public ResponseEntity<List<Department>> getAllDepartments(){
 		return ResponseEntity.ok().body(repo.findAll());
 	}
-    
+	public ResponseEntity<Object> deleteDepartmentByCode(String code) {
+		repo.deleteById(code);
+		return ResponseEntity.ok().body("success");
+	}
     
     
 }
