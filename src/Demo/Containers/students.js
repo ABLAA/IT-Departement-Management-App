@@ -87,11 +87,17 @@ class Students extends Component {
     console.log("ok");
   }
   getStudents = () => {
-    axios.get("http://localhost:8080/departments").then(response => {
-      // this.setState({ products: response.data });
-      console.log(response.data);
-      console.log("ok");
-    });
+    let token = localStorage.getItem("jwToken");
+    console.log(token);
+    axios
+      .get("http://localhost:8080/departments", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(response => {
+        // this.setState({ products: response.data });
+        console.log(response.data);
+        console.log("ok");
+      });
   };
   handleChange = e => {
     this.setState({
