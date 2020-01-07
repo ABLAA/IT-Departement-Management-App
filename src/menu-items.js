@@ -31,7 +31,7 @@ export default {
         },
         {
           id: "administrative managers",
-          title: "administrative managers",
+          title: "administrative management",
           type: "item",
           url: "/administrative-managers",
           icon: "feather icon-eye"
