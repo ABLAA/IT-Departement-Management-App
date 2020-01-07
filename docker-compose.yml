@@ -1,0 +1,49 @@
+version: "3.7"
+
+services: 
+    db:
+        image: mysql:5.7
+        ports: 
+            - "3306:3306"
+        restart: always
+        environment:
+            MYSQL_DATABASE: SOA
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - ../data:/var/lib/mysql
+        networks:
+            - backend 
+        
+    app-server:
+        build:
+            context: back
+            dockerfile: dockerfile
+        ports: 
+            - '8080:8080'
+        restart: always
+        networks: 
+            - backend
+            - frontend
+        depends_on: 
+            - db
+    
+    app-client:
+        build:
+            context: front # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+            dockerfile: Dockerfile
+            args:
+              REACT_APP_API_BASE_URL: http://127.0.0.1:8080
+        ports:
+        - "9090:3000" # Map the exposed port 80 on the container to port 9090 on the host machine
+        restart: always
+        depends_on:
+        - app-server
+        networks:
+        - frontend   
+    
+   
+networks: 
+    frontend:
+    backend:
