@@ -291,14 +291,11 @@ class Students extends Component {
                                 <DatePicker
                                   showIcon={false}
                                   placeholderText="  click to choose date"
-                                  className="date-picker"
-                                  popperClassName="drv-datepicker-popper"
                                   value={this.state.birthDate}
                                   selected={new Date()}
                                   onChange={this.handleChange3}
-                                  dateFormat="yyyy-MM-dd"
-                                  maxDate={moment().subtract(6570, "days")}
-                                  minDate={moment()}
+                                  dateFormat="d MMM yyyy"
+                                 
                                 />
                               </Form.Group>
                               <Form.Group as={Col} md="6">
