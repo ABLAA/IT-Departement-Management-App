@@ -50,9 +50,12 @@ class AdministrativeManagers extends Component {
       isVertically: false,
       isVertically1: false,
       isVertically3: false,
+      isVertically4: false,
       studentsClasses:[],
       sections: [],
       years: [],
+      abscentStudents:[],
+      students:[],
       department: "",
       name: "",
       birthDate: "",
@@ -60,13 +63,15 @@ class AdministrativeManagers extends Component {
       class: "",
       classCode: "",
       sectionName:"",
+      studentName:"",
+      date:"",
+      studentLastName:"",
       universitairyYear:"",
       chkBasic: false,
       chkCustom: false,
       checkMeSwitch: false,
       showModal: false
     };
-    this.handleChange3 = this.handleChange3.bind(this);
   }
 
   handleCheckboxChange = (e, value) => {
@@ -78,6 +83,46 @@ class AdministrativeManagers extends Component {
     this.getSections();
     this.getYears();
     this.getStudentsClasses();
+    this.getabscentStudents();
+    this.getStudents();
+
+  }
+  getStudents = () => {
+    axios
+      .get("http://localhost:8080/Students")
+      .then(response => {
+        this.setState({ students: response.data });
+        console.log(response.data);
+        console.log("ok");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+  getStudents = () => {
+    axios
+      .get("http://localhost:8080/Students")
+      .then(response => {
+        this.setState({ students: response.data });
+        console.log(response.data);
+        console.log("ok");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+  getabscentStudents=()=> {
+    axios
+    .get("http://localhost:8080/Absences")
+    .then(response => {
+      this.setState({ abscentStudents: response.data });
+      console.log(response.data);
+      console.log("ok");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
   }
   getStudentsClasses = () => {
     axios.get("http://localhost:8080/StudentClasss").then(response => {
@@ -118,20 +163,12 @@ class AdministrativeManagers extends Component {
       [e.target.name]: e.target.value
     });
   };
-  handleChange2(e) {
-    console.log(e.target.value);
-    this.setState({ class: e.target.value });
-  }
+
   handleChangeStatus(e) {
     console.log(e.target.value);
     this.setState({ status: e.target.value });
   }
-  handleChange3 = date => {
-    let data = new Date(date);
-    const birthDate = moment(data).format("YYYY-mm-DD");
-    this.setState({ birthDate });
-    console.log(birthDate);
-  };
+
   handleSubmit = (e, formData, inputs) => {
     e.preventDefault();
     //alert(JSON.stringify(formData, null, 2));
@@ -142,9 +179,6 @@ class AdministrativeManagers extends Component {
     //console.log(errorInputs);
   };
 
-  matchPassword = value => {
-    return value && value === this.state.password;
-  };
   deletesection = code => {
     let sections = this.state.sections.filter(section => section.code !== code);
     this.setState({ sections });
@@ -159,13 +193,34 @@ class AdministrativeManagers extends Component {
         console.log(error);
       });
   };
+  addAbsence =()=>   {
+  let student =[]
+  student = this.state.students.filter(stud => stud.firstName === this.state.studentName && stud.lastName === this.state.studentLastName );
+  let abscentStudents = this.state.abscentStudents;
+  console.log(student);
+  let absence = {
+    date: this.state.date,
+    studentCode: student[0] === undefined ? "null" : student[0].code
+  };
+  console.log(absence);
+  axios
+    .post("http://localhost:8080/Absence", absence)
+    .then(function(response) {
+      console.log(response.data);
+      abscentStudents.push(response.data);
+      this.setState({ abscentStudents });
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+};
   addStudentClass = () => {
     let section =[]
-    section = this.state.sections.filter(sec => sec.name === this.state.sectionName);
+    section = this.state.sections.filter(sec => sec.name === this.state.sectionName  );
     console.log(section);
     let studentsClasses = this.state.studentsClasses;
     let studentClass = {
-      sectionCode: section[0].code ,
+      sectionCode: section[0] === undefined ? "null" : section[0].code ,
       universitairyYear: this.state.universitairyYear
     }
     console.log(studentClass);
@@ -622,6 +677,140 @@ class AdministrativeManagers extends Component {
             </Card>
           </Col>
         </Row>
+        <Col md={12}>
+            <Card>
+              <Card.Header>
+                <Card.Title>
+                  <Row>
+                    <Col md={11}>
+                      <h5>List of Absences </h5>
+                    </Col>
+                    <Col md={1}>
+                      <Button
+                        className="btn-icon btn"
+                        variant="secondary"
+                        onClick={() => this.setState({ isVertically4: true })}
+                      >
+                        <i className="feather icon-plus-square" />
+                      </Button>
+                      <Modal
+                        centered
+                        show={this.state.isVertically4}
+                        onHide={() => this.setState({ isVertically4: false })}
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title as="h5">Add year</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <ValidationForm
+                            onSubmit={this.handleSubmit}
+                            onErrorSubmit={this.handleErrorSubmit}
+                          >
+                            <Form.Row>
+                            <Form.Group as={Col} md="6">
+
+                                <Form.Label htmlFor="universitairyYear">
+                                date of Absence
+                                </Form.Label>
+                                <TextInput
+                                  name="date"
+                                  id="date"
+                                  placeholder="date "
+                                  value={this.state.date}
+                                  onChange={this.handleChange}
+                                  autoComplete="off"
+                                  pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
+                                  errorMessage={{
+                                    pattern:
+                                      "Please enter a valid date : yyyy-mm-dd"
+                                  }}
+                                />
+                              </Form.Group>
+                              <Form.Group as={Col} md="6">
+                              <Form.Label htmlFor="sectionName">
+                                Student First Name
+                                </Form.Label>
+                                <TextInput
+                                  name="studentName"
+                                  id="studentName"
+                                  placeholder="studentName "
+                                  value={this.state.studentName}
+                                  onChange={this.handleChange}
+                                  autoComplete="off"
+                                />
+                              </Form.Group>
+                              <Form.Group as={Col} md="6">
+                              <Form.Label htmlFor="studentLastName">
+                                Student Last Name
+                                </Form.Label>
+                                <TextInput
+                                  name="studentLastName"
+                                  id="studentLastName"
+                                  placeholder="studentLastName "
+                                  value={this.state.studentLastName}
+                                  onChange={this.handleChange}
+                                  autoComplete="off"
+                                />
+                              </Form.Group>
+
+                               <Form.Group as={Col} sm={12} className="mt-3">
+                                <Button
+                                  onClick={() => {
+                                    this.addAbsence();
+                                  }}
+                                  type="submit"
+                                >
+                                  add classes
+                                </Button>
+                              </Form.Group>
+                            
+                          
+                            </Form.Row>
+                          </ValidationForm>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            variant="secondary"
+                            onClick={() =>
+                              this.setState({ isVertically4: false })
+                            }
+                          >
+                            Close
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    </Col>
+                  </Row>
+                </Card.Title>
+              </Card.Header>
+              <Card.Body>
+                                <Table responsive hover>
+                                <thead>
+                                <tr>
+                                <th>date</th>
+                                  <th>First Name</th>
+                                  <th>Last Name</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                    {this.state.abscentStudents.map(stud => (
+                        
+                         <tr key={stud.code}>
+                            <td>{moment(stud.date).format("YYYY/MM/DD")}</td>
+                            <td>{stud.student.firstName}</td>
+                            <td>{stud.student.lastName}</td>
+                            <td>{stud.student.status}</td>
+    
+                         </tr>
+                   
+                        ))}
+
+                                    </tbody>
+                                </Table>
+              </Card.Body>
+            </Card>
+          </Col>
       </Aux>
     );
   }
