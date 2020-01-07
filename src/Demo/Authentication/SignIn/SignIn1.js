@@ -35,28 +35,29 @@ class SignUp1 extends PureComponent {
     this.login(this.state);
   }
   componentDidMount() {}
-  setAuthToken = token => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      console.log(token);
-    } else delete axios.defaults.headers.common["Authorization"];
-  };
+  // setAuthToken = token => {
+  //   if (token) {
+  //     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  //     console.log(token);
+  //   } else delete axios.defaults.headers.common["Authorization"];
+  // };
   login = data => {
-    const { history } = this.props;
+    this.props.history.push("/home");
 
-    axios
-      .post("http://localhost:8080/authenticate", data)
-      .then(response => {
-        let token = response.data.token;
-        localStorage.setItem("jwToken", token);
-        this.setAuthToken(token);
-        this.props.history.push("/home");
-        console.log(token);
-      })
-      .catch(function(error) {
-        if (history) history.push("/");
-        // console.log(error.response.data);
-      });
+    // const { history } = this.props;
+
+    // axios
+    //   .post("http://localhost:8080/authenticate", data)
+    //   .then(response => {
+    //     let token = response.data.token;
+    //     localStorage.setItem("jwToken", token);
+    //     this.setAuthToken(token);
+    //   console.log(token);
+    // })
+    // .catch(function(error) {
+    //   if (history) history.push("/");
+    //   // console.log(error.response.data);
+    // });
   };
 
   render() {

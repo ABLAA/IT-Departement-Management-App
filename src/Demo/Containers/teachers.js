@@ -6,46 +6,42 @@ import {
   FileInput
 } from "react-bootstrap4-form-validation";
 import Aux from "../../hoc/_Aux";
+import axios from "axios";
+import validator from "validator";
+import * as moment from "moment";
 
 class Teachers extends Component {
   state = {
     isVertically: false,
     isVertically1: false,
-
-    teachers: [
-      {
-        code: 1,
-        firstName: "sadok",
-        lastName: "YAHIA",
-        birthDate: "08/08/1996 ",
-        departement: "IF5"
-      },
-      {
-        code: 2,
-        firstName: "ahlem",
-        lastName: "Ben chrifa",
-        birthDate: "08/08/1996 ",
-        departement: "IF5"
-      },
-      {
-        code: 3,
-        firstName: "heithem",
-        lastName: "ABBES",
-        birthDate: "08/08/1996 ",
-        departement: "IF5"
-      }
-    ],
-
+    teachers: [],
     firstName: "",
     lastName: "",
     birthDate: "",
-    departement: "",
+    departmentName: "",
     chkBasic: false,
     chkCustom: false,
     checkMeSwitch: false,
     showModal: false
   };
-
+  componentDidMount() {
+    this.getTeachers();
+    console.log("ok");
+  }
+  getTeachers = () => {
+    let token = localStorage.getItem("jwToken");
+    console.log(token);
+    axios
+      .get("http://localhost:8080/Professors")
+      .then(response => {
+        this.setState({ teachers: response.data });
+        console.log(response.data);
+        console.log("ok");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
   handleCheckboxChange = (e, value) => {
     this.setState({
       [e.target.name]: value
@@ -74,18 +70,36 @@ class Teachers extends Component {
   deleteteacher = code => {
     let teachers = this.state.teachers.filter(teacher => teacher.code !== code);
     this.setState({ teachers });
+    axios
+      .delete(`http://localhost:8080/Professor/${code}`)
+      .then(response => {
+        // this.setState({ teachers: response.data });
+        console.log(response.data);
+        console.log("ok");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
   addteacher = () => {
     let teachers = this.state.teachers;
-    teachers.push({
-      code: Math.random(),
+    let teacher = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       birthDate: this.state.birthDate,
-      departement: this.state.departement
-    });
+      departmentName: this.state.departmentName
+    };
     console.log(teachers);
-    this.setState({ teachers });
+    axios
+      .post("http://localhost:8080/Professor", teacher)
+      .then(function(response) {
+        console.log(response.data);
+        teachers.push(response.data);
+        this.setState({ teachers });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
   editteacher = code => {
     let teachers = this.state.teachers.map(teacher =>
@@ -101,9 +115,9 @@ class Teachers extends Component {
             birthDate: this.state.birthDate.length
               ? this.state.birthDate
               : teacher.birthDate,
-            departement: this.state.departement.length
-              ? this.state.departement
-              : teacher.departement
+            departmentName: this.state.departmentName.length
+              ? this.state.departmentName
+              : teacher.departmentName
           }
         : teacher
     );
@@ -168,6 +182,7 @@ class Teachers extends Component {
                                   value={this.state.firstName}
                                   onChange={this.handleChange}
                                   autoComplete="off"
+                                  minLength="3"
                                 />
                               </Form.Group>
                               <Form.Group as={Col} md="6">
@@ -175,6 +190,7 @@ class Teachers extends Component {
                                   Last name
                                 </Form.Label>
                                 <TextInput
+                                  minLength="3"
                                   name="lastName"
                                   id="lastName"
                                   placeholder="Last Name"
@@ -183,22 +199,6 @@ class Teachers extends Component {
                                   autoComplete="off"
                                 />
                               </Form.Group>
-                              {/* <Form.Group as={Col} md="6">
-                                <Form.Label htmlFor="email">Email</Form.Label>
-                                <TextInput
-                                  name="email"
-                                  id="email"
-                                  type="email"
-                                  placeholder="Email Address"
-                                  validator={validator.isEmail}
-                                  errorMessage={{
-                                    validator: "Please enter a valid email"
-                                  }}
-                                  value={this.state.email}
-                                  onChange={this.handleChange}
-                                  autoComplete="off"
-                                />
-                              </Form.Group> */}
                               <Form.Group as={Col} md="6">
                                 <Form.Label htmlFor="birthDate">
                                   Birth date
@@ -210,22 +210,27 @@ class Teachers extends Component {
                                   value={this.state.birthDate}
                                   onChange={this.handleChange}
                                   autoComplete="off"
+                                  pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
+                                  errorMessage={{
+                                    pattern:
+                                      "Please enter a valid date : yyyy-mm-dd"
+                                  }}
                                 />
                               </Form.Group>
                               <Form.Group as={Col} md="6">
                                 <Form.Label htmlFor="departement">
-                                  Class
+                                  departement Name
                                 </Form.Label>
                                 <TextInput
-                                  name="departement"
+                                  name="departmentName"
                                   id="departement"
-                                  placeholder="teacher Class "
+                                  placeholder="profesor department "
                                   required
                                   errorMessage={{
                                     required: "departement is required",
                                     pattern: "departement is invalid."
                                   }}
-                                  value={this.state.departement}
+                                  value={this.state.departmentName}
                                   onChange={this.handleChange}
                                   autoComplete="off"
                                 />
@@ -267,7 +272,7 @@ class Teachers extends Component {
                           <Button
                             variant="secondary"
                             onClick={() =>
-                              this.setState({ isVertically: false })
+                              this.setState({ isVertically1: false })
                             }
                           >
                             Close
@@ -286,7 +291,7 @@ class Teachers extends Component {
                       <th>First Name</th>
                       <th>Last Name</th>
                       <th>birth Date</th>
-                      <th>class</th>
+                      <th>department</th>
                       <th>delete</th>
                       <th>update</th>
                     </tr>
@@ -297,8 +302,11 @@ class Teachers extends Component {
                         <th scope="row">1</th>
                         <td>{teacher.firstName}</td>
                         <td>{teacher.lastName}</td>
-                        <td>{teacher.birthDate}</td>
-                        <td>{teacher.departement}</td>
+                        <td>
+                          {" "}
+                          {moment(teacher.birthDate).format("YYYY/MM/DD")}
+                        </td>
+                        <td>{teacher.department.title}</td>
                         <td>
                           <Button
                             className="btn-icon btn"
@@ -389,7 +397,7 @@ class Teachers extends Component {
                                   </Form.Group>
                                   <Form.Group as={Col} md="6">
                                     <Form.Label htmlFor="departement">
-                                      Class
+                                      departement Name
                                     </Form.Label>
                                     <TextInput
                                       name="departement"
@@ -401,9 +409,9 @@ class Teachers extends Component {
                                         pattern: "departement is invalid."
                                       }}
                                       value={
-                                        !this.state.departement.length
-                                          ? teacher.departement
-                                          : this.state.departement
+                                        !this.state.departmentName.length
+                                          ? teacher.departmentName
+                                          : this.state.departmentName
                                       }
                                       onChange={this.handleChange}
                                       autoComplete="off"
