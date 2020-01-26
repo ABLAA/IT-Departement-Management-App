@@ -15,25 +15,25 @@ export default {
           icon: "feather icon-home"
         },
         {
-          id: "students",
-          title: "students",
+          id: "Clients",
+          title: "Clients",
           type: "item",
-          url: "/students",
+          url: "/clients",
           classes: "nav-item",
           icon: "feather icon-users"
         },
         {
-          id: "teachers",
-          title: "teachers",
+          id: "Cars",
+          title: "Cars",
           type: "item",
-          url: "/teachers",
+          url: "/cars",
           icon: "feather icon-briefcase"
         },
         {
-          id: "administrative managers",
-          title: "administrative management",
+          id: "Rentals",
+          title: "Rentals",
           type: "item",
-          url: "/administrative-managers",
+          url: "/rentals",
           icon: "feather icon-eye"
         },
         {

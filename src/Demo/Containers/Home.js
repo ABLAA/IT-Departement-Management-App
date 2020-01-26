@@ -12,20 +12,18 @@ class SamplePage extends Component {
             <img
               src={require("../../assets/images/fst.jpg")}
               alt=""
-              style={{ width: "100%" }}
+              style={{ width: "100%", height: "300px" }}
             />
           </Col>
         </Row>
-        <Card title="Management of IT department" isOption>
-          <Row>
-            <Col>
-              <ul>
-                <li> Student management</li>
-                <li> Teachers management</li>
-                <li> Administrative management</li>
-              </ul>
-            </Col>
-          </Row>
+        <Card title="Management of Car Rental " isOption>
+          <Col>
+            <ul>
+              <li> Clients management</li>
+              <li> Cars management</li>
+              <li> Rental management</li>
+            </ul>
+          </Col>
         </Card>
       </Aux>
     );

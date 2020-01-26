@@ -6,11 +6,9 @@ window.$ = $;
 global.jQuery = $;
 
 const Home = React.lazy(() => import("./Demo/Containers/Home"));
-const Students = React.lazy(() => import("./Demo/Containers/students"));
-const Teachers = React.lazy(() => import("./Demo/Containers/teachers"));
-const AdministrativeManagers = React.lazy(() =>
-  import("./Demo/Containers/administrativeManagers")
-);
+const Cars = React.lazy(() => import("./Demo/Containers/cars"));
+const Clients = React.lazy(() => import("./Demo/Containers/clients"));
+const Rental = React.lazy(() => import("./Demo/Containers/rental"));
 const Statistics = React.lazy(() => import("./Demo/Dashboard/Statistics"));
 
 const routes = [
@@ -20,13 +18,13 @@ const routes = [
     name: "Home",
     component: Home
   },
-  { path: "/students", exact: true, name: "students", component: Students },
-  { path: "/teachers", exact: true, name: "teachers", component: Teachers },
+  { path: "/cars", exact: true, name: "cars", component: Cars },
+  { path: "/clients", exact: true, name: "clients", component: Clients },
   {
-    path: "/administrative-managers",
+    path: "/rental",
     exact: true,
-    name: "administrativeManagers",
-    component: AdministrativeManagers
+    name: "rental",
+    component: Rental
   },
   {
     path: "/Statistics",

@@ -21,6 +21,6 @@ export default {
   navListTitleHide: false,
   configBlock: false,
   layout6Background:
-    "linear-gradient(to right, #A445B2 0%, #D41872 52%, #FF0066 100%)", // used only for pre-layout = layout-6
-  layout6BackSize: "" // used only for pre-layout = layout-6
+    "linear-gradient(to right, #00000 20%, #D41872 100%, #FF0066 100%)", // used only for pre-layout = layout-6
+  layout6BackSize: "100px" // used only for pre-layout = layout-6
 };

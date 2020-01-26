@@ -1,85 +1,49 @@
 import React, { Component } from "react";
-import { Row, Col, Card, Table, Button, Modal, Form } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Table,
+  Button,
+  Modal,
+  Form,
+  Alert
+} from "react-bootstrap";
 import {
   ValidationForm,
   TextInput,
-  BaseFormControl,
   FileInput
 } from "react-bootstrap4-form-validation";
-import MaskedInput from "react-text-mask";
 import Aux from "../../hoc/_Aux";
 import axios from "axios";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import * as moment from "moment";
 import validator from "validator";
+import * as moment from "moment";
 
-class MaskWithValidation extends BaseFormControl {
-  constructor(props) {
-    super(props);
-    this.inputRef = React.createRef();
-  }
-
-  getInputRef() {
-    return this.inputRef.current.inputElement;
-  }
-
-  handleChange = e => {
-    this.checkError();
-    if (this.props.onChange) this.props.onChange(e);
-  };
-
-  render() {
-    return (
-      <React.Fragment>
-        <MaskedInput
-          ref={this.inputRef}
-          {...this.filterProps()}
-          onChange={this.handleChange}
-        />
-        {this.displayErrorMessage()}
-        {this.displaySuccessMessage()}
-      </React.Fragment>
-    );
-  }
-}
-class Students extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isVertically: false,
-      isVertically1: false,
-      students: [],
-      studentsClasses: [],
-      firstName: "",
-      lastName: "",
-      birthDate: "",
-      status: "",
-      class: "",
-      classCode: "",
-      chkBasic: false,
-      chkCustom: false,
-      checkMeSwitch: false,
-      showModal: false
-    };
-    this.handleChange3 = this.handleChange3.bind(this);
-  }
-
-  handleCheckboxChange = (e, value) => {
-    this.setState({
-      [e.target.name]: value
-    });
+class Clients extends Component {
+  state = {
+    isVertically: false,
+    isVertically1: false,
+    clients: [],
+    nom: "",
+    prenom: "",
+    numeroCIN: "",
+    numPermis: "",
+    dateNaissance: "",
+    adresse: "",
+    chkBasic: false,
+    chkCustom: false,
+    checkMeSwitch: false,
+    showModal: false
   };
   componentDidMount() {
-    this.getStudents();
-    this.getStudentsClasses();
-    console.log(this.state.class);
+    this.getClients();
+    console.log("ok");
   }
-  getStudents = () => {
+  getClients = () => {
     axios
-      .get("http://localhost:8080/Students")
+      .get("http://localhost:3000/clients")
       .then(response => {
-        this.setState({ students: response.data });
+        this.setState({ clients: response.data });
         console.log(response.data);
         console.log("ok");
       })
@@ -87,12 +51,9 @@ class Students extends Component {
         console.log(error);
       });
   };
-
-  getStudentsClasses = () => {
-    axios.get("http://localhost:8080/StudentClasss").then(response => {
-      this.setState({ studentsClasses: response.data });
-      console.log(this.state.studentsClasses);
-      console.log("ok");
+  handleCheckboxChange = (e, value) => {
+    this.setState({
+      [e.target.name]: value
     });
   };
 
@@ -101,20 +62,7 @@ class Students extends Component {
       [e.target.name]: e.target.value
     });
   };
-  handleChange2(e) {
-    console.log(e.target.value);
-    this.setState({ class: e.target.value });
-  }
-  handleChangeStatus(e) {
-    console.log(e.target.value);
-    this.setState({ status: e.target.value });
-  }
-  handleChange3 = date => {
-    let data = new Date(date);
-    const birthDate = moment(data).format("YYYY-mm-DD");
-    this.setState({ birthDate });
-    console.log(birthDate);
-  };
+
   handleSubmit = (e, formData, inputs) => {
     e.preventDefault();
     //alert(JSON.stringify(formData, null, 2));
@@ -128,13 +76,13 @@ class Students extends Component {
   matchPassword = value => {
     return value && value === this.state.password;
   };
-  deleteStudent = code => {
-    let students = this.state.students.filter(student => student.code !== code);
-    this.setState({ students });
+  deleteclient = code => {
+    let clients = this.state.clients.filter(client => client._id !== code);
+    this.setState({ clients });
     axios
-      .delete(`http://localhost:8080/Student/${code}`)
+      .delete(`http://localhost:3000/clients/${code}`)
       .then(response => {
-        // this.setState({ students: response.data });
+        // this.setState({ Clients: response.data });
         console.log(response.data);
         console.log("ok");
       })
@@ -142,71 +90,58 @@ class Students extends Component {
         console.log(error);
       });
   };
-  addStudent = () => {
-    let students = this.state.students;
-    let studentsClasses = this.state.studentsClasses;
-    let elmt = 0;
-    for (let i = 0; i < studentsClasses.length; i++) {
-      if (studentsClasses[i].code === this.state.class) elmt = i;
-    }
-    let student = {
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      birthDate: this.state.birthDate,
-      status: this.state.status,
-      classCode: this.state.class
+  addclient = () => {
+    let clients = this.state.clients;
+    let client = {
+      numeroCIN: this.state.numeroCIN,
+      numPermis: this.state.numPermis,
+      nom: this.state.nom,
+      prenom: this.state.prenom,
+      dateNaissance: this.state.dateNaissance,
+      adresse: this.state.adresse
     };
-    console.log(student);
     axios
-      .post("http://localhost:8080/Student", student)
+      .post("http://localhost:3000/clients", client)
       .then(function(response) {
         console.log(response.data);
-        students.push(response.data);
-        studentsClasses[elmt].students.push(response.data);
-        console.log(studentsClasses);
-        this.setState({ studentsClasses });
-        this.setState({ students });
+        if (response.data.message.length) {
+          clients.push(response.data);
+          this.setState({ clients });
+        } else alert("check information");
+      })
+      .catch(function(error) {
+        alert("check information");
+      });
+  };
+  editclient = client => {
+    let oldClients = this.state.clients;
+    let upadetClient = {
+      numeroCIN: !this.state.numeroCIN.length
+        ? client.numeroCIN
+        : this.state.numeroCIN,
+      numPermis: !this.state.numPermis.length
+        ? client.numPermis
+        : this.state.numPermis,
+      nom: !this.state.nom.length ? client.nom : this.state.nom,
+      prenom: !this.state.prenom.length ? client.prenom : this.state.prenom,
+      dateNaissance: !this.state.dateNaissance.length
+        ? client.dateNaissance
+        : this.state.dateNaissance,
+      adresse: !this.state.adresse.length ? client.adresse : this.state.adresse
+    };
+    let clients = oldClients.map(item =>
+      item._id === client._id ? upadetClient : item
+    );
+    this.setState({ clients });
+
+    axios
+      .put(`http://localhost:3000/clients/${client._id}`, upadetClient)
+      .then(function(response) {
+        console.log(response.data);
       })
       .catch(function(error) {
         console.log(error);
       });
-  };
-  editStudent = code => {
-    let students = this.state.students.map(student =>
-      student.code == code
-        ? {
-            code: Math.random(),
-            firstName: this.state.firstName.length
-              ? this.state.firstName
-              : student.firstName,
-            lastName: this.state.lastName.length
-              ? this.state.lastName
-              : student.lastName,
-            birthDate: this.state.birthDate.length
-              ? this.state.birthDate
-              : student.birthDate,
-            status: this.state.status.length
-              ? this.state.status
-              : student.status
-          }
-        : student
-    );
-    // students = students.map(student => {
-    //   if (student.code === code) {
-    //     return {
-    //       code: Math.random(),
-    //       firstName: this.state.firstName,
-    //       lastName: this.state.lastName,
-    //       birthDate: this.state.birthDate,
-    //       status: this.state.status
-    //     };
-    //   }
-    // });
-    console.log(students, this.state.firstName);
-    this.setState({ students });
-  };
-  getPickerValue = value => {
-    console.log(value);
   };
 
   render() {
@@ -219,7 +154,7 @@ class Students extends Component {
                 <Card.Title>
                   <Row>
                     <Col md={11}>
-                      <h5>List of Students</h5>
+                      <h5>List of Clients</h5>
                     </Col>
                     <Col md={1}>
                       <Button
@@ -235,7 +170,7 @@ class Students extends Component {
                         onHide={() => this.setState({ isVertically1: false })}
                       >
                         <Modal.Header closeButton>
-                          <Modal.Title as="h5">Add student</Modal.Title>
+                          <Modal.Title as="h5">Add client</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <ValidationForm
@@ -244,60 +179,101 @@ class Students extends Component {
                           >
                             <Form.Row>
                               <Form.Group as={Col} md="6">
-                                <Form.Label htmlFor="firstName">
+                                <Form.Label htmlFor="nom">
                                   First name
                                 </Form.Label>
                                 <TextInput
-                                  name="firstName"
-                                  id="firstName"
+                                  name="nom"
+                                  id="nom"
                                   placeholder="First Name"
                                   required
-                                  value={this.state.firstName}
+                                  value={this.state.nom}
                                   onChange={this.handleChange}
                                   autoComplete="off"
+                                  minLength="3"
                                 />
                               </Form.Group>
                               <Form.Group as={Col} md="6">
-                                <Form.Label htmlFor="lastName">
+                                <Form.Label htmlFor="prenom">
                                   Last name
                                 </Form.Label>
                                 <TextInput
-                                  name="lastName"
-                                  id="lastName"
+                                  minLength="3"
+                                  name="prenom"
+                                  id="prenom"
                                   placeholder="Last Name"
-                                  value={this.state.lastName}
+                                  value={this.state.prenom}
                                   onChange={this.handleChange}
                                   autoComplete="off"
                                 />
                               </Form.Group>
-
                               <Form.Group as={Col} md="6">
-                                <Form.Label htmlFor="birthDate">
+                                <Form.Label htmlFor="nom">
+                                  numero CIN
+                                </Form.Label>
+                                <TextInput
+                                  name="numeroCIN"
+                                  id="numeroCIN"
+                                  placeholder="numero CIN"
+                                  required
+                                  value={this.state.numeroCIN}
+                                  onChange={this.handleChange}
+                                  autoComplete="off"
+                                  minLength="3"
+                                />
+                              </Form.Group>
+                              <Form.Group as={Col} md="6">
+                                <Form.Label htmlFor="nom">
+                                  Num Permis
+                                </Form.Label>
+                                <TextInput
+                                  name="numPermis"
+                                  id="numPermis"
+                                  placeholder="Num Permis"
+                                  required
+                                  value={this.state.numPermis}
+                                  onChange={this.handleChange}
+                                  autoComplete="off"
+                                  minLength="3"
+                                />
+                              </Form.Group>
+                              <Form.Group as={Col} md="6">
+                                <Form.Label htmlFor="dateNaissance">
                                   Birth date
                                 </Form.Label>
                                 <TextInput
-                                  name="birthDate"
-                                  id="birthDate"
-                                  placeholder="Year-Month-Day"
-                                  value={this.state.birthDate}
+                                  name="dateNaissance"
+                                  id="dateNaissance"
+                                  placeholder="birth Date"
+                                  value={this.state.dateNaissance}
                                   onChange={this.handleChange}
+                                  autoComplete="off"
                                   pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
                                   errorMessage={{
                                     pattern:
                                       "Please enter a valid date : yyyy-mm-dd"
                                   }}
-                                  autoComplete="off"
-                                />
-                                <DatePicker
-                                  showIcon={false}
-                                  placeholderText="  click to choose date"
-                                  value={this.state.birthDate}
-                                  selected={new Date()}
-                                  onChange={this.handleChange3}
-                                  dateFormat="d MMM yyyy"
-                                 
                                 />
                               </Form.Group>
+                              <Form.Group as={Col} md="6">
+                                <Form.Label htmlFor="departement">
+                                  Adresse
+                                </Form.Label>
+                                <TextInput
+                                  name="adresse"
+                                  id="adresse"
+                                  placeholder="Adresse"
+                                  required
+                                  errorMessage={{
+                                    required: "departement is required",
+                                    pattern: "departement is invalid."
+                                  }}
+                                  value={this.state.adresse}
+                                  onChange={this.handleChange}
+                                  autoComplete="off"
+                                />
+                              </Form.Group>
+
                               <Form.Group as={Col} md="6">
                                 <Form.Label htmlFor="upload_avatar">
                                   Upload Avatar
@@ -317,48 +293,14 @@ class Students extends Component {
                                   />
                                 </div>
                               </Form.Group>
-                              <Form.Group as={Col} md="6">
-                                <Form.Label htmlFor="status">class</Form.Label>
-
-                                <select
-                                  style={{ padding: "10px", margin: "10px" }}
-                                  onChange={e => this.handleChange2(e)}
-                                >
-                                  {this.state.studentsClasses.map(classe => (
-                                    <option
-                                      key={classe.code}
-                                      value={classe.code}
-                                    >
-                                      {classe.section.name +
-                                        "  " +
-                                        classe.year.year}
-                                    </option>
-                                  ))}
-                                </select>
-                              </Form.Group>
-                              <Form.Group as={Col} md="6">
-                                <Form.Label htmlFor="status">Status</Form.Label>
-                                <select
-                                  style={{ padding: "10px", margin: "11px" }}
-                                  onChange={e => this.handleChangeStatus(e)}
-                                >
-                                  <option value="PASSED">PASSED </option>
-                                  <option value="FAILED">FAILED </option>
-                                  <option value="POSTPONED">POSTPONED </option>
-                                  <option value="IN_PROGRESS">
-                                    IN_PROGRESS
-                                  </option>
-                                </select>
-                              </Form.Group>
-
                               <Form.Group as={Col} sm={12} className="mt-3">
                                 <Button
                                   onClick={() => {
-                                    this.addStudent();
+                                    this.addclient();
                                   }}
                                   type="submit"
                                 >
-                                  add student
+                                  add client
                                 </Button>
                               </Form.Group>
                             </Form.Row>
@@ -383,43 +325,32 @@ class Students extends Component {
                 <Table responsive>
                   <thead>
                     <tr>
-                      <th>#</th>
                       <th>First Name</th>
                       <th>Last Name</th>
-                      <th>Birth Date</th>
-                      <th>Status</th>
-                      <th>Section</th>
-                      <th>Delete</th>
-                      <th>Update</th>
+                      <th>Num Cin</th>
+                      <th>Num Permis</th>
+                      <th>birth Date</th>
+                      <th>Adresse</th>
+                      <th>delete</th>
+                      <th>update</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.students.map(student => (
-                      <tr key={student.code}>
-                        <th scope="row">1</th>
-                        <td>{student.firstName}</td>
-                        <td>{student.lastName}</td>
+                    {this.state.clients.map(client => (
+                      <tr key={client._id}>
+                        <td>{client.nom}</td>
+                        <td>{client.prenom}</td>
+                        <td>{client.numPermis}</td>
+                        <td>{client.numeroCIN}</td>
                         <td>
-                          {moment(student.birthDate).format("YYYY/MM/DD")}
+                          {moment(client.dateNaissance).format("YYYY/MM/DD")}
                         </td>
-                        <td>{student.status}</td>
-                        <td>
-                          {this.state.studentsClasses.map(id =>
-                            id.students.map(stud =>
-                              stud.code === student.code ? (
-                                <p key={stud.code}>
-                                  {id.section.name + "  " + id.year.year}
-                                </p>
-                              ) : null
-                            )
-                          )}
-                        </td>
-
+                        <td>{client.adresse}</td>
                         <td>
                           <Button
                             className="btn-icon btn"
                             variant="danger"
-                            onClick={() => this.deleteStudent(student.code)}
+                            onClick={() => this.deleteclient(client._id)}
                           >
                             <i className="feather icon-trash" />
                           </Button>
@@ -442,7 +373,7 @@ class Students extends Component {
                             }
                           >
                             <Modal.Header closeButton>
-                              <Modal.Title as="h5">edit student</Modal.Title>
+                              <Modal.Title as="h5">edit client</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                               <ValidationForm
@@ -451,76 +382,86 @@ class Students extends Component {
                               >
                                 <Form.Row>
                                   <Form.Group as={Col} md="6">
-                                    <Form.Label htmlFor="firstName">
+                                    <Form.Label htmlFor="nom">
                                       First name
                                     </Form.Label>
                                     <TextInput
-                                      name="firstName"
-                                      id="firstName"
+                                      name="nom"
+                                      id="nom"
                                       placeholder="First Name"
                                       required
-                                      value={
-                                        !this.state.firstName.length
-                                          ? student.firstName
-                                          : this.state.firstName
-                                      }
+                                      value={this.state.nom}
                                       onChange={this.handleChange}
                                       autoComplete="off"
                                     />
                                   </Form.Group>
                                   <Form.Group as={Col} md="6">
-                                    <Form.Label htmlFor="lastName">
+                                    <Form.Label htmlFor="prenom">
                                       Last name
                                     </Form.Label>
                                     <TextInput
-                                      name="lastName"
-                                      id="lastName"
+                                      name="prenom"
+                                      id="prenom"
                                       placeholder="Last Name"
-                                      value={
-                                        !this.state.lastName.length
-                                          ? student.lastName
-                                          : this.state.lastName
-                                      }
+                                      value={this.state.prenom}
+                                      onChange={this.handleChange}
+                                      autoComplete="off"
+                                    />
+                                  </Form.Group>
+                                  <Form.Group as={Col} md="6">
+                                    <Form.Label htmlFor="prenom">
+                                      numero CIN
+                                    </Form.Label>
+                                    <TextInput
+                                      name="numeroCIN"
+                                      id="numeroCIN"
+                                      placeholder="numero CIN"
+                                      value={this.state.numeroCIN}
+                                      onChange={this.handleChange}
+                                      autoComplete="off"
+                                    />
+                                  </Form.Group>
+                                  <Form.Group as={Col} md="6">
+                                    <Form.Label htmlFor="prenom">
+                                      num Permis
+                                    </Form.Label>
+                                    <TextInput
+                                      name="numPermis"
+                                      id="numPermis"
+                                      placeholder="numero CIN"
+                                      value={this.state.numPermis}
                                       onChange={this.handleChange}
                                       autoComplete="off"
                                     />
                                   </Form.Group>
 
                                   <Form.Group as={Col} md="6">
-                                    <Form.Label htmlFor="birthDate">
+                                    <Form.Label htmlFor="dateNaissance">
                                       Birth date
                                     </Form.Label>
                                     <TextInput
-                                      name="birthDate"
-                                      id="birthDate"
+                                      name="dateNaissance"
+                                      id="dateNaissance"
                                       placeholder="birth Date"
-                                      value={
-                                        !this.state.birthDate.length
-                                          ? student.birthDate
-                                          : this.state.birthDate
-                                      }
+                                      value={this.state.dateNaissance}
                                       onChange={this.handleChange}
                                       autoComplete="off"
                                     />
                                   </Form.Group>
                                   <Form.Group as={Col} md="6">
-                                    <Form.Label htmlFor="status">
-                                      Class
+                                    <Form.Label htmlFor="departement">
+                                      Adresse
                                     </Form.Label>
                                     <TextInput
-                                      name="status"
-                                      id="status"
-                                      placeholder="student Class "
+                                      name="adresse"
+                                      id="adresse"
+                                      placeholder="client Class "
                                       required
                                       errorMessage={{
-                                        required: "status is required",
-                                        pattern: "status is invalid."
+                                        required: "departement is required",
+                                        pattern: "departement is invalid."
                                       }}
-                                      value={
-                                        !this.state.status.length
-                                          ? student.status
-                                          : this.state.status
-                                      }
+                                      value={this.state.adresse}
                                       onChange={this.handleChange}
                                       autoComplete="off"
                                     />
@@ -548,11 +489,11 @@ class Students extends Component {
                                   <Form.Group as={Col} sm={12} className="mt-3">
                                     <Button
                                       onClick={() => {
-                                        this.editStudent(student.code);
+                                        this.editclient(client);
                                       }}
                                       type="submit"
                                     >
-                                      edit student
+                                      edit client
                                     </Button>
                                   </Form.Group>
                                 </Form.Row>
@@ -562,7 +503,7 @@ class Students extends Component {
                               <Button
                                 variant="secondary"
                                 onClick={() =>
-                                  this.setState({ isVertically2: false })
+                                  this.setState({ isVertically: false })
                                 }
                               >
                                 Close
@@ -583,4 +524,4 @@ class Students extends Component {
   }
 }
 
-export default Students;
+export default Clients;

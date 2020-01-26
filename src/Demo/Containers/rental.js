@@ -51,22 +51,22 @@ class AdministrativeManagers extends Component {
       isVertically1: false,
       isVertically3: false,
       isVertically4: false,
-      studentsClasses:[],
+      studentsClasses: [],
       sections: [],
       years: [],
-      abscentStudents:[],
-      students:[],
+      abscentStudents: [],
+      students: [],
       department: "",
       name: "",
       birthDate: "",
       status: "",
       class: "",
       classCode: "",
-      sectionName:"",
-      studentName:"",
-      date:"",
-      studentLastName:"",
-      universitairyYear:"",
+      sectionName: "",
+      studentName: "",
+      date: "",
+      studentLastName: "",
+      universitairyYear: "",
       chkBasic: false,
       chkCustom: false,
       checkMeSwitch: false,
@@ -85,7 +85,6 @@ class AdministrativeManagers extends Component {
     this.getStudentsClasses();
     this.getabscentStudents();
     this.getStudents();
-
   }
   getStudents = () => {
     axios
@@ -111,19 +110,18 @@ class AdministrativeManagers extends Component {
         console.log(error);
       });
   };
-  getabscentStudents=()=> {
+  getabscentStudents = () => {
     axios
-    .get("http://localhost:8080/Absences")
-    .then(response => {
-      this.setState({ abscentStudents: response.data });
-      console.log(response.data);
-      console.log("ok");
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-
-  }
+      .get("http://localhost:8080/Absences")
+      .then(response => {
+        this.setState({ abscentStudents: response.data });
+        console.log(response.data);
+        console.log("ok");
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
   getStudentsClasses = () => {
     axios.get("http://localhost:8080/StudentClasss").then(response => {
       this.setState({ studentsClasses: response.data });
@@ -131,8 +129,8 @@ class AdministrativeManagers extends Component {
       console.log("ok");
     });
   };
-    getSections=()=> {
-      axios
+  getSections = () => {
+    axios
       .get("http://localhost:8080/Sections")
       .then(response => {
         this.setState({ sections: response.data });
@@ -142,10 +140,9 @@ class AdministrativeManagers extends Component {
       .catch(function(error) {
         console.log(error);
       });
-
-    }
-    getYears=()=> {
-      axios
+  };
+  getYears = () => {
+    axios
       .get("http://localhost:8080/UniversitairyYears")
       .then(response => {
         this.setState({ years: response.data });
@@ -155,8 +152,7 @@ class AdministrativeManagers extends Component {
       .catch(function(error) {
         console.log(error);
       });
-
-    }
+  };
 
   handleChange = e => {
     this.setState({
@@ -193,36 +189,42 @@ class AdministrativeManagers extends Component {
         console.log(error);
       });
   };
-  addAbsence =()=>   {
-  let student =[]
-  student = this.state.students.filter(stud => stud.firstName === this.state.studentName && stud.lastName === this.state.studentLastName );
-  let abscentStudents = this.state.abscentStudents;
-  console.log(student);
-  let absence = {
-    date: this.state.date,
-    studentCode: student[0] === undefined ? "null" : student[0].code
+  addAbsence = () => {
+    let student = [];
+    student = this.state.students.filter(
+      stud =>
+        stud.firstName === this.state.studentName &&
+        stud.lastName === this.state.studentLastName
+    );
+    let abscentStudents = this.state.abscentStudents;
+    console.log(student);
+    let absence = {
+      date: this.state.date,
+      studentCode: student[0] === undefined ? "null" : student[0].code
+    };
+    console.log(absence);
+    axios
+      .post("http://localhost:8080/Absence", absence)
+      .then(function(response) {
+        console.log(response.data);
+        abscentStudents.push(response.data);
+        this.setState({ abscentStudents });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   };
-  console.log(absence);
-  axios
-    .post("http://localhost:8080/Absence", absence)
-    .then(function(response) {
-      console.log(response.data);
-      abscentStudents.push(response.data);
-      this.setState({ abscentStudents });
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-};
   addStudentClass = () => {
-    let section =[]
-    section = this.state.sections.filter(sec => sec.name === this.state.sectionName  );
+    let section = [];
+    section = this.state.sections.filter(
+      sec => sec.name === this.state.sectionName
+    );
     console.log(section);
     let studentsClasses = this.state.studentsClasses;
     let studentClass = {
-      sectionCode: section[0] === undefined ? "null" : section[0].code ,
+      sectionCode: section[0] === undefined ? "null" : section[0].code,
       universitairyYear: this.state.universitairyYear
-    }
+    };
     console.log(studentClass);
     axios
       .post("http://localhost:8080/StudentClass", studentClass)
@@ -278,9 +280,7 @@ class AdministrativeManagers extends Component {
             department: this.state.department.length
               ? this.state.department
               : section.department,
-            name: this.state.name.length
-              ? this.state.name
-              : section.name,
+            name: this.state.name.length ? this.state.name : section.name,
             birthDate: this.state.birthDate.length
               ? this.state.birthDate
               : section.birthDate,
@@ -344,7 +344,7 @@ class AdministrativeManagers extends Component {
                             <Form.Row>
                               <Form.Group as={Col} md="6">
                                 <Form.Label htmlFor="department">
-                                department name
+                                  department name
                                 </Form.Label>
                                 <TextInput
                                   name="department"
@@ -358,7 +358,7 @@ class AdministrativeManagers extends Component {
                               </Form.Group>
                               <Form.Group as={Col} md="6">
                                 <Form.Label htmlFor="name">
-                                section name
+                                  section name
                                 </Form.Label>
                                 <TextInput
                                   name="name"
@@ -370,7 +370,7 @@ class AdministrativeManagers extends Component {
                                 />
                               </Form.Group>
 
-                               <Form.Group as={Col} sm={12} className="mt-3">
+                              <Form.Group as={Col} sm={12} className="mt-3">
                                 <Button
                                   onClick={() => {
                                     this.addSection();
@@ -380,8 +380,6 @@ class AdministrativeManagers extends Component {
                                   add section
                                 </Button>
                               </Form.Group>
-                            
-                          
                             </Form.Row>
                           </ValidationForm>
                         </Modal.Body>
@@ -409,7 +407,6 @@ class AdministrativeManagers extends Component {
 
                       <th>departement</th>
                       <th>delete</th>
-                     
                     </tr>
                   </thead>
                   <tbody>
@@ -418,8 +415,6 @@ class AdministrativeManagers extends Component {
                         <th scope="row">1</th>
                         <td>{section.name}</td>
                         <td>{section.department.title}</td>
-
-                        
 
                         <td>
                           <Button
@@ -430,8 +425,6 @@ class AdministrativeManagers extends Component {
                             <i className="feather icon-trash" />
                           </Button>
                         </td>
-                        
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -469,11 +462,8 @@ class AdministrativeManagers extends Component {
                             onErrorSubmit={this.handleErrorSubmit}
                           >
                             <Form.Row>
-                            <Form.Group as={Col} md="6">
-
-                                <Form.Label htmlFor="year">
-                                year
-                                </Form.Label>
+                              <Form.Group as={Col} md="6">
+                                <Form.Label htmlFor="year">year</Form.Label>
                                 <TextInput
                                   name="year"
                                   id="year"
@@ -484,7 +474,7 @@ class AdministrativeManagers extends Component {
                                 />
                               </Form.Group>
 
-                               <Form.Group as={Col} sm={12} className="mt-3">
+                              <Form.Group as={Col} sm={12} className="mt-3">
                                 <Button
                                   onClick={() => {
                                     this.addYear();
@@ -494,8 +484,6 @@ class AdministrativeManagers extends Component {
                                   add year
                                 </Button>
                               </Form.Group>
-                            
-                          
                             </Form.Row>
                           </ValidationForm>
                         </Modal.Body>
@@ -522,7 +510,6 @@ class AdministrativeManagers extends Component {
                       <th>Name</th>
 
                       <th>delete</th>
-                     
                     </tr>
                   </thead>
                   <tbody>
@@ -530,7 +517,6 @@ class AdministrativeManagers extends Component {
                       <tr key={year.year}>
                         <th scope="row">1</th>
                         <td>{year.year}</td>
-                       
 
                         <td>
                           <Button
@@ -542,8 +528,6 @@ class AdministrativeManagers extends Component {
                             <i className="feather icon-trash" />
                           </Button>
                         </td>
-                        
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -581,10 +565,9 @@ class AdministrativeManagers extends Component {
                             onErrorSubmit={this.handleErrorSubmit}
                           >
                             <Form.Row>
-                            <Form.Group as={Col} md="6">
-
+                              <Form.Group as={Col} md="6">
                                 <Form.Label htmlFor="universitairyYear">
-                                universitairy Year
+                                  universitairy Year
                                 </Form.Label>
                                 <TextInput
                                   name="universitairyYear"
@@ -596,8 +579,8 @@ class AdministrativeManagers extends Component {
                                 />
                               </Form.Group>
                               <Form.Group as={Col} md="6">
-                              <Form.Label htmlFor="sectionName">
-                                section Name
+                                <Form.Label htmlFor="sectionName">
+                                  section Name
                                 </Form.Label>
                                 <TextInput
                                   name="sectionName"
@@ -609,7 +592,7 @@ class AdministrativeManagers extends Component {
                                 />
                               </Form.Group>
 
-                               <Form.Group as={Col} sm={12} className="mt-3">
+                              <Form.Group as={Col} sm={12} className="mt-3">
                                 <Button
                                   onClick={() => {
                                     this.addStudentClass();
@@ -619,8 +602,6 @@ class AdministrativeManagers extends Component {
                                   add classes
                                 </Button>
                               </Form.Group>
-                            
-                          
                             </Form.Row>
                           </ValidationForm>
                         </Modal.Body>
@@ -646,7 +627,6 @@ class AdministrativeManagers extends Component {
                       <th>#</th>
                       <th>section</th>
                       <th>year</th>
-                     
                     </tr>
                   </thead>
                   <tbody>
@@ -655,7 +635,6 @@ class AdministrativeManagers extends Component {
                         <th scope="row">1</th>
                         <td>{item.section.name}</td>
                         <td>{item.year.year}</td>
-                       
 
                         <td>
                           <Button
@@ -667,8 +646,6 @@ class AdministrativeManagers extends Component {
                             <i className="feather icon-trash" />
                           </Button>
                         </td>
-                        
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -678,139 +655,132 @@ class AdministrativeManagers extends Component {
           </Col>
         </Row>
         <Col md={12}>
-            <Card>
-              <Card.Header>
-                <Card.Title>
-                  <Row>
-                    <Col md={11}>
-                      <h5>List of Absences </h5>
-                    </Col>
-                    <Col md={1}>
-                      <Button
-                        className="btn-icon btn"
-                        variant="secondary"
-                        onClick={() => this.setState({ isVertically4: true })}
-                      >
-                        <i className="feather icon-plus-square" />
-                      </Button>
-                      <Modal
-                        centered
-                        show={this.state.isVertically4}
-                        onHide={() => this.setState({ isVertically4: false })}
-                      >
-                        <Modal.Header closeButton>
-                          <Modal.Title as="h5">Add year</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <ValidationForm
-                            onSubmit={this.handleSubmit}
-                            onErrorSubmit={this.handleErrorSubmit}
-                          >
-                            <Form.Row>
+          <Card>
+            <Card.Header>
+              <Card.Title>
+                <Row>
+                  <Col md={11}>
+                    <h5>List of Absences </h5>
+                  </Col>
+                  <Col md={1}>
+                    <Button
+                      className="btn-icon btn"
+                      variant="secondary"
+                      onClick={() => this.setState({ isVertically4: true })}
+                    >
+                      <i className="feather icon-plus-square" />
+                    </Button>
+                    <Modal
+                      centered
+                      show={this.state.isVertically4}
+                      onHide={() => this.setState({ isVertically4: false })}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title as="h5">Add year</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <ValidationForm
+                          onSubmit={this.handleSubmit}
+                          onErrorSubmit={this.handleErrorSubmit}
+                        >
+                          <Form.Row>
                             <Form.Group as={Col} md="6">
-
-                                <Form.Label htmlFor="universitairyYear">
+                              <Form.Label htmlFor="universitairyYear">
                                 date of Absence
-                                </Form.Label>
-                                <TextInput
-                                  name="date"
-                                  id="date"
-                                  placeholder="date "
-                                  value={this.state.date}
-                                  onChange={this.handleChange}
-                                  autoComplete="off"
-                                  pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
-                                  errorMessage={{
-                                    pattern:
-                                      "Please enter a valid date : yyyy-mm-dd"
-                                  }}
-                                />
-                              </Form.Group>
-                              <Form.Group as={Col} md="6">
+                              </Form.Label>
+                              <TextInput
+                                name="date"
+                                id="date"
+                                placeholder="date "
+                                value={this.state.date}
+                                onChange={this.handleChange}
+                                autoComplete="off"
+                                pattern="([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"
+                                errorMessage={{
+                                  pattern:
+                                    "Please enter a valid date : yyyy-mm-dd"
+                                }}
+                              />
+                            </Form.Group>
+                            <Form.Group as={Col} md="6">
                               <Form.Label htmlFor="sectionName">
                                 Student First Name
-                                </Form.Label>
-                                <TextInput
-                                  name="studentName"
-                                  id="studentName"
-                                  placeholder="studentName "
-                                  value={this.state.studentName}
-                                  onChange={this.handleChange}
-                                  autoComplete="off"
-                                />
-                              </Form.Group>
-                              <Form.Group as={Col} md="6">
+                              </Form.Label>
+                              <TextInput
+                                name="studentName"
+                                id="studentName"
+                                placeholder="studentName "
+                                value={this.state.studentName}
+                                onChange={this.handleChange}
+                                autoComplete="off"
+                              />
+                            </Form.Group>
+                            <Form.Group as={Col} md="6">
                               <Form.Label htmlFor="studentLastName">
                                 Student Last Name
-                                </Form.Label>
-                                <TextInput
-                                  name="studentLastName"
-                                  id="studentLastName"
-                                  placeholder="studentLastName "
-                                  value={this.state.studentLastName}
-                                  onChange={this.handleChange}
-                                  autoComplete="off"
-                                />
-                              </Form.Group>
+                              </Form.Label>
+                              <TextInput
+                                name="studentLastName"
+                                id="studentLastName"
+                                placeholder="studentLastName "
+                                value={this.state.studentLastName}
+                                onChange={this.handleChange}
+                                autoComplete="off"
+                              />
+                            </Form.Group>
 
-                               <Form.Group as={Col} sm={12} className="mt-3">
-                                <Button
-                                  onClick={() => {
-                                    this.addAbsence();
-                                  }}
-                                  type="submit"
-                                >
-                                  add classes
-                                </Button>
-                              </Form.Group>
-                            
-                          
-                            </Form.Row>
-                          </ValidationForm>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            variant="secondary"
-                            onClick={() =>
-                              this.setState({ isVertically4: false })
-                            }
-                          >
-                            Close
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
-                    </Col>
-                  </Row>
-                </Card.Title>
-              </Card.Header>
-              <Card.Body>
-                                <Table responsive hover>
-                                <thead>
-                                <tr>
-                                <th>date</th>
-                                  <th>First Name</th>
-                                  <th>Last Name</th>
-                                  <th>Status</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                    {this.state.abscentStudents.map(stud => (
-                        
-                         <tr key={stud.code}>
-                            <td>{moment(stud.date).format("YYYY/MM/DD")}</td>
-                            <td>{stud.student.firstName}</td>
-                            <td>{stud.student.lastName}</td>
-                            <td>{stud.student.status}</td>
-    
-                         </tr>
-                   
-                        ))}
-
-                                    </tbody>
-                                </Table>
-              </Card.Body>
-            </Card>
-          </Col>
+                            <Form.Group as={Col} sm={12} className="mt-3">
+                              <Button
+                                onClick={() => {
+                                  this.addAbsence();
+                                }}
+                                type="submit"
+                              >
+                                add classes
+                              </Button>
+                            </Form.Group>
+                          </Form.Row>
+                        </ValidationForm>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={() =>
+                            this.setState({ isVertically4: false })
+                          }
+                        >
+                          Close
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </Col>
+                </Row>
+              </Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <Table responsive hover>
+                <thead>
+                  <tr>
+                    <th>date</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.abscentStudents.map(stud => (
+                    <tr key={stud.code}>
+                      <td>{moment(stud.date).format("YYYY/MM/DD")}</td>
+                      <td>{stud.student.firstName}</td>
+                      <td>{stud.student.lastName}</td>
+                      <td>{stud.student.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
       </Aux>
     );
   }
